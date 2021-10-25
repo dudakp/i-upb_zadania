@@ -1,0 +1,38 @@
+//////////////////////////////////////////////////////////////////////////
+// TODO:                                                                //
+// Uloha1: Vytvorit funkciu na bezpecne generovanie saltu.              //
+// Uloha2: Vytvorit funkciu na hashovanie.                              //
+// Je vhodne vytvorit aj dalsie pomocne funkcie napr. na porovnavanie   //
+// hesla ulozeneho v databaze so zadanym heslom.                        //
+//////////////////////////////////////////////////////////////////////////
+package sk.dudak.fei.upb;
+
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+
+public class Security {
+
+    public static byte[] hash(String password, byte[] salt) throws Exception {
+        /*
+         *   Pred samotnym hashovanim si najskor musite ulozit instanciu hashovacieho algoritmu.
+         *   Hash sa uklada ako bitovy retazec, takze ho nasledne treba skonvertovat na String (napr. cez BigInteger);
+         */
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        return factory.generateSecret(spec).getEncoded();
+    }
+
+    protected static byte[] getSalt() {
+        /*
+         *   Salt treba generovat cez secure funkciu.
+         */
+        SecureRandom random = new SecureRandom();
+        byte[] res = new byte[16];
+        random.nextBytes(res);
+        return res;
+    }
+}
+
