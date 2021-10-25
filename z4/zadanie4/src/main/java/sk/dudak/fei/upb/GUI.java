@@ -218,6 +218,7 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_Registration
 
     private void Exit(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Exit
+        HibernateUtil.shutdown();
         dispose();
     }//GEN-LAST:event_Exit
 

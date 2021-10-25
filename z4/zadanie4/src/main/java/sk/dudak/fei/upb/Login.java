@@ -26,7 +26,7 @@ public class Login {
         } else {
             LocalDateTime loginLockedTo = user.getLoginLockedTo();
             if (loginLockedTo != null && LocalDateTime.now().isBefore(loginLockedTo)) {
-                return new Database.MyResult(false, "Dalsie prihlasenie bude mozne az o: " + loginLockedTo.format(DateTimeFormatter.RFC_1123_DATE_TIME));
+                return new Database.MyResult(false, "Dalsie prihlasenie bude mozne az o: " + loginLockedTo.format(DateTimeFormatter.ISO_DATE_TIME));
             }
             byte[] hash = Security.hash(heslo, Base64.getDecoder().decode(user.getSalt()));
             String calculatedPwdHash = Base64.getEncoder().encodeToString(hash);
@@ -38,7 +38,7 @@ public class Login {
                 } else {
                     user.setFailedAttempts(1);
                 }
-                if (failedAttempts != null && failedAttempts >= 3) {
+                if (failedAttempts != null && failedAttempts > 3) {
                     user.setLoginLockedTo(LocalDateTime.now().plusMinutes(3));
                 }
                 Database.saveUser(user);
